@@ -1,6 +1,6 @@
 ﻿// Offline support: app shell is cache-first, live data is network-first.
-const CACHE = "can-i-run-v10";
-const SHELL = ["/", "/manifest.json", "/icon-192.png", "/icon-512.png", "/i18n.js"];
+const CACHE = "can-i-run-v11";
+const SHELL = ["/", "/styles.css", "/app.js", "/i18n.js", "/manifest.json", "/icon-192.png", "/icon-512.png"];
 
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)));

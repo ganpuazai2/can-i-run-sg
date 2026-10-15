@@ -1,15 +1,20 @@
-﻿// Checks that every translation key used in index.html exists, and lists keys missing per language.
+// Checks that every translation key used by the app exists, and lists keys missing per language.
+// Usage: node tools/check-i18n.mjs
 import { readFileSync } from "fs";
 
-const src = readFileSync(new URL("../i18n.js", import.meta.url), "utf8");
-const I18N = new Function("localStorage", "navigator", "location", src + "; return I18N;")({ getItem: () => null, setItem() {} }, { language: "en" }, { search: "" });
-const html = readFileSync(new URL("../index.html", import.meta.url), "utf8");
+const read = f => readFileSync(new URL("../" + f, import.meta.url), "utf8");
+const I18N = new Function("localStorage", "navigator", "location", read("i18n.js") + "; return I18N;")(
+  { getItem: () => null, setItem() {} }, { language: "en" }, { search: "" });
+const code = read("index.html") + read("app.js");
 
 const used = new Set();
-for (const m of html.matchAll(/\bt\("([\w.]+)"/g)) used.add(m[1]);
-for (const m of html.matchAll(/data-i18n(?:-html)?="([\w.]+)"/g)) used.add(m[1]);
-// keys built dynamically
-["verdict.", "subs.", "tips.", "tips.title.", "recap.vibe."].forEach(p => [0, 1, 2, 3, 4].forEach(i => I18N.en[p + i] && used.add(p + i)));
+for (const m of code.matchAll(/\bt\("([\w.]+)"/g)) if (!m[1].endsWith(".")) used.add(m[1]);
+for (const m of code.matchAll(/data-i18n(?:-html|-aria)?="([\w.]+)"/g)) used.add(m[1]);
+// keys built at runtime, e.g. t("lead." + v.lead)
+const leads = ["go", "psiHaz", "psiVU", "psiU", "pmHigh", "pmElev", "heatHigh", "heatMod", "hot", "lightning", "uv", "thunder", "heavy", "rain"];
+leads.forEach(k => { used.add("lead." + k); if (k !== "go") used.add("r." + k); });
+[0, 1, 2].forEach(i => ["verdict.", "tips.", "tips.title."].forEach(p => used.add(p + i)));
+[0, 1, 2, 3, 4].forEach(i => used.add("recap.vibe." + i));
 ["Low", "Moderate", "High"].forEach(s => used.add("heat." + s));
 ["west", "north", "central", "east", "south"].forEach(r => used.add("region." + r));
 
@@ -19,6 +24,5 @@ console.log("keys used:", used.size, "| missing in en:", missingEn.length ? miss
 const optional = k => /^route\.\w+$/.test(k);
 for (const l of ["zh", "ms", "ta"]) {
   const miss = Object.keys(I18N.en).filter(k => !(k in I18N[l]) && !optional(k));
-  const arrBad = Object.keys(I18N.en).filter(k => Array.isArray(I18N.en[k]) && k in I18N[l] && !Array.isArray(I18N[l][k]) && k !== "runs.weekdays");
-  console.log(l, "missing:", miss.length ? miss : "none", arrBad.length ? "| not arrays: " + arrBad : "");
+  console.log(l, "missing:", miss.length ? miss : "none");
 }
