@@ -1,6 +1,6 @@
-﻿// Translations for Singapore's four official languages. {x} placeholders are filled by t(key, { x }).
-// Missing keys fall back to English, so a new string only has to be added to `en` to work.
-const I18N = {
+// All user-facing text, keyed by language. {x} placeholders are filled by t(key, { x }).
+// Missing keys fall back to English, so a new string only has to be added to en to work.
+export const STRINGS = {
   en: {
     "lang.name": "EN", "locale": "en-SG",
     "app.name": "Can I Run?", "app.plain": "Can I Run Today?", "app.place": "Singapore",
@@ -449,18 +449,3 @@ const I18N = {
     "wx.Heavy Thundery Showers with Gusty Winds": "இடியுடன் கனமழை, பலத்த காற்று",
   },
 };
-const LANGS = ["en", "zh", "ms", "ta"];
-// priority: ?lang= in the link (e.g. sharing a Chinese link with family), then saved choice, then phone language
-const urlLang = new URLSearchParams(location.search).get("lang");
-let LANG = LANGS.includes(urlLang) ? urlLang : localStorage.getItem("lang") || (navigator.language || "").slice(0, 2);
-if (!LANGS.includes(LANG)) LANG = "en";
-if (urlLang === LANG) localStorage.setItem("lang", LANG);
-
-function t(key, vars) {
-  let s = I18N[LANG][key] ?? I18N.en[key] ?? key;
-  if (vars && typeof s === "string") s = s.replace(/\{(\w+)\}/g, (_, k) => vars[k] ?? "");
-  return s;
-}
-// NEA weather wording, e.g. "Thundery Showers" → 雷阵雨. Unknown phrases are shown as-is.
-const twx = s => (s ? (I18N[LANG]["wx." + s] ?? (LANG === "en" ? s : I18N.en["wx." + s] ?? s)) : "–");
-const tRegion = r => t("region." + r);
