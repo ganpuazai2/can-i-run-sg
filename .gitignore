@@ -1,0 +1,11 @@
+.vercel
+.env*
+node_modules
+
+# local test output (screenshots, previews with cached data, scratch files)
+tools/*.html
+tools/check.js
+tools/block.js
+tools/preview.svg
+# source data for tools/build-map.mjs (2 MB, re-downloadable from data.gov.sg)
+tools/pa.geojson
