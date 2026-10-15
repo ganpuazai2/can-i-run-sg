@@ -56,15 +56,15 @@ tools/serve.mjs     local dev server
 
 ## Decisions
 
-**A server function in front of NEA.** The app needs six NEA APIs. Calling them from every visitor's browser hit data.gov.sg's rate limit within a few page loads. One Vercel function fetches them together, keeps the API key off the client, and caches the result at the edge for five minutes, so NEA sees a handful of requests no matter how many people visit.
+**Why there's a server function in front of NEA.** My first version called NEA straight from the browser. It needed six different APIs, and data.gov.sg started rate-limiting me after a couple of page refreshes, so friends would've seen sample data instead of the real numbers. Now one small Vercel function fetches everything together and caches it for five minutes. NEA only gets a few requests however many people open the app, and my API key never reaches the browser.
 
-**The worst signal wins.** A runner cares about the one thing that should stop them, not an average. Air quality is checked first, so when several signals are equally bad, the advice talks about the haze.
+**Why the worst signal wins.** If you're about to run and there's lightning nearby, it doesn't matter that the air is clean. I didn't want an average score hiding the one thing that should stop you. Air quality gets checked first, so on a bad haze day the advice talks about the haze, not the UV.
 
-**1-hour PM2.5 matters more than 24-hour PSI.** PSI is the official headline number but it lags by hours. PM2.5 shows the air right now, which is what you breathe on a run.
+**Why PM2.5 counts for more than PSI.** PSI is the number everyone quotes, but it's a 24-hour average, so it can still look fine hours after the air has turned bad. The 1-hour PM2.5 reading is what you're actually breathing on your run, so that's what the verdict leans on.
 
-**A website, not an app-store app.** It installs to the home screen, works offline, costs nothing to run, and updates instantly without review.
+**Why it's a website and not an app.** I wanted friends to try it from a link, with no app store, no install and no cost to me. It still saves to the home screen, works offline, and any update reaches everyone straight away.
 
-**No framework or build step.** The app is a few hundred lines of plain JavaScript modules. Keeping it dependency-free means it loads fast and anyone can read it.
+**Why there's no framework.** It's a small app, and plain JavaScript was enough. No build step and no dependencies means it loads fast, and anyone reading the code can follow it without learning a framework first.
 
 ## Credits
 
