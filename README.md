@@ -1,5 +1,7 @@
 # Can I Run Today? · Singapore
 
+[![Tests](https://github.com/ganpuazai2/can-i-run-sg/actions/workflows/test.yml/badge.svg)](https://github.com/ganpuazai2/can-i-run-sg/actions/workflows/test.yml) [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 A clear Yes / Maybe / Nope on whether it's a good time to run outdoors in Singapore, based on live NEA data.
 
 **Live:** https://can-i-run-sg.vercel.app
@@ -68,4 +70,4 @@ tools/serve.mjs     local dev server
 
 ## Credits
 
-Built with the help of [Claude](https://claude.ai). Data © NEA, via [data.gov.sg](https://data.gov.sg).
+MIT licensed, see [LICENSE](LICENSE). Built with the help of [Claude](https://claude.ai). Data © NEA, via [data.gov.sg](https://data.gov.sg).
