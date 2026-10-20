@@ -4,7 +4,7 @@
 
 A clear Yes / Maybe / Nope on whether it's a good time to run outdoors in Singapore, based on live NEA data.
 
-**Live:** https://can-i-run-sg.vercel.app
+**Live:** https://can-i-run-sg.vercel.app (around 200 visitors in its first week)
 
 <img src="docs/screenshot.png" alt="Can I Run? showing a Nope verdict for Central Singapore during haze" width="320" />
 
